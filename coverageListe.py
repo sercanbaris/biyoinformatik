@@ -1,45 +1,28 @@
-#read ".coverage" files, read inside and make a list
-#output must be like this:
-# 236912 SGH 116.303
-# 212653 SGH 126,3020
-
-
 import os
-import sys
-import re
 
-def listeYap():
-    # read .coverage files
-    for root, dirs, files in os.walk("."):
-        for file in files:
-            if file.endswith(".coverage"):
-                with open(file, 'r') as f:
-                    lines = f.readlines()
-                    for line in lines:
-                        # find the line which contains the word "Total"
-                        if re.search("Total", line):
-                            # split the line by space
-                            line = line.split()
-                            # find the first element of the line
-                            # and split it by "/"
-                            line = line[0].split("/")
-                            # print the first element of the line
-                            # and the last element of the line
-                            print(line[0], line[-1])
-                            # if the first element of the line is "SGH"
-                            # and the last element of the line is "Total"
-                            if line[0] == "SGH" and line[-1] == "Total":
-                                # print the first element of the line
-                                # and the last element of the line
-                                print(line[0], line[-1])
-                            # if the first element of the line is "SGH"
-                            # and the last element of the line is "Total"
-                            if line[0] == "SGH" and line[-1] == "Total":
-                                # print the first element of the line
-                                # and the last element of the line
-                                print(line[0], line[-1])
+current_path = os.getcwd()
+print(current_path)
 
-if __name__ == "__main__":
-    listeYap()
+folder_path = current_path
+
+folder_path = folder_path.replace('\\', '/')
+
+file_names = os.listdir(folder_path)
+
+for file_name in file_names:
+    #print(file_name)
+    coverage_files = [file_name for file_name in file_names if file_name.endswith('.coverage')]
+
+#print(coverage_files)
 
     
+for coverage_file in coverage_files:
+    with open(os.path.join(folder_path, coverage_file), 'r') as file:
+        data = file.read()
+        print(coverage_file[:6] + ": " + data)
+
+        with open('output2.txt', 'w') as output_file:
+            for coverage_file in coverage_files:
+                with open(os.path.join(folder_path, coverage_file), 'r') as file:
+                    data = file.read()
+                    output_file.write(coverage_file[:6] + " " + data )
